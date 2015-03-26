@@ -1,0 +1,80 @@
+<% provide(:title, 'Items') %>
+<% provide(:body_id, 'items_index') %>
+
+<% case session[:browse_context] %>
+<% when ItemsController::BrowseContext::BROWSING_COLLECTION %>
+    <ol class="breadcrumb">
+      <li><%= link_to 'Home', root_path %></li>
+      <li><%= link_to 'Collections', repository_collections_path %></li>
+      <li class="active"><%= truncate(@collection.title, length: 50) %></li>
+    </ol>
+<% end %>
+
+<% if @collection %>
+  <% provide(:active_nav, 'collections') %>
+  <h1><%= @collection.title %>
+    <% if @collection.subtitle %>
+      <br><small><%= @collection.subtitle %></small>
+    <% end %>
+  </h1>
+<% else %>
+  <% provide(:active_nav, 'items') %>
+<% end %>
+
+<% if @items.total_length > 0 %>
+  <% if @collection and @collection.key == 'image-sample' %>
+
+    <div class="kq-results">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          Showing <%= @start + 1 %>&ndash;<%= @start + @num_results_shown %> of
+          <%= @items.total_length %> items
+        </div>
+      </div>
+
+      <div class="kq-tile-results">
+        <%= items_as_list(@items, @start, thumbnail_size: 512,
+                          show_collections: !@collection,
+                          show_description: false,
+                          show_add_to_favorites_buttons: true,
+                          show_remove_from_favorites_buttons: true) %>
+      </div>
+
+      <div class="text-center">
+        <%= paginate(@items, @limit, @current_page) %>
+      </div>
+    </div>
+
+  <% else %>
+
+    <div class="row">
+      <div class="col-sm-3 kq-facets kq-panel-facets">
+        <%= facets_as_panels(@items) %>
+      </div>
+
+      <div class="col-sm-9 kq-results">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            Showing <%= @start + 1 %>&ndash;<%= @start + @num_results_shown %> of
+            <%= @items.total_length %> items
+          </div>
+        </div>
+
+        <div class="kq-list-results">
+          <%= items_as_list(@items, @start, show_collections: !@collection,
+                            show_description: true,
+                            show_add_to_favorites_buttons: true,
+                            show_remove_from_favorites_buttons: true) %>
+        </div>
+
+        <div class="text-center">
+          <%= paginate(@items, @limit, @current_page) %>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+
+<% else %>
+  <p>No items.</p>
+<% end %>
