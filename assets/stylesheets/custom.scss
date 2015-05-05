@@ -16,6 +16,12 @@
 @import "items";
 @import "landing";
 
+@media print {
+  header, footer, .btn, .kq-facets, audio, video {
+    display: none;
+  }
+}
+
 header {
   background-color: #022544;
   border-bottom: 5px solid #dddddd;
