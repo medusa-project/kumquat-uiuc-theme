@@ -15,6 +15,7 @@
 
 @import "items";
 @import "landing";
+@import "website";
 
 @media print {
   header, footer, .btn, .kq-facets, audio, video {
@@ -29,6 +30,8 @@ a {
 header {
   background-color: #022544;
   border-bottom: 5px solid #dddddd;
+  position: relative;
+  z-index: 10;
 }
 
 #header-full-width-column {
